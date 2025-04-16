@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block body %}
+<style>
+    /* Table Styling */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+    }
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #6c757d;
+        color: rgb(209, 27, 27);
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #ddd;
+    }
+    /* Button Styling */
+    .btn-custom {
+        margin: 5px;
+        text-transform: uppercase;
+    }
+</style>
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('static/assets/img/home.jpg')">
+    <div class="container text-center text-white">
+        <h1>Admin Dashboard</h1>
+        <p class="subheading">A Blog That Tells the Story of Warriors</p>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container my-5">
+    <h3 class="text-primary">Basic Actions</h3>
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a class="btn btn-primary btn-custom" href="/add_post">➕ Add Post</a>
+        <a class="btn btn-success btn-custom" href="/dashboard/about">🙋‍♂️ About Me</a>
+        <a class="btn btn-warning btn-custom" href="/change_password">🔄 Change Password</a>
+        <a class="btn btn-danger btn-custom" href="/logout">🏃🏻‍♂️ Logout</a>
+    </div>
+
+    <hr>
+
+    <h2 class="text-dark">Posts</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.date }}</td>
+                    <td>
+                        <a href="/edit/{{ post.sno }}" class="btn btn-sm btn-primary">✏ Edit</a>
+                    </td>
+                    <td>
+                        <a href="/delete/{{ post.sno }}" class="btn btn-sm btn-danger delete-btn">❌ Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- JavaScript Enhancements -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", function (event) {
+            if (!confirm("Are you sure you want to delete this post? This action cannot be undone.")) {
+                event.preventDefault();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

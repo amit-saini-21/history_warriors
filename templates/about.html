@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block body %}
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('{{ url_for('static', filename='assets/img/about-bg.jpg') }}'); background-size: cover; background-position: center; height: 300px;">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7 text-center">
+                    <div class="page-heading">
+                        <h1 class="text-white fw-bold">About Me</h1>
+                        <span class="subheading text-light">This is what I do.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="mb-4">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    {% if paragraphs %}
+                        {% for para in paragraphs %}
+                            <p class="fade-in">{{ para.para }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center">No content available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Smooth fade-in effect for paragraphs
+        document.addEventListener("DOMContentLoaded", function() {
+            let paragraphs = document.querySelectorAll(".fade-in");
+            paragraphs.forEach((p, index) => {
+                setTimeout(() => {
+                    p.style.opacity = "1";
+                    p.style.transform = "translateY(0)";
+                }, index * 200);
+            });
+        });
+    </script>
+
+    <style>
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+        }
+
+        /* Ensure text looks clean */
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        /* Responsive header height */
+        @media (max-width: 768px) {
+            .masthead {
+                height: 200px;
+            }
+        }
+    </style>
+{% endblock %}

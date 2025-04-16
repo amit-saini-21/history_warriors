@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block body %}
+    <!-- Page Header -->
+     
+    <header class="masthead" style="background-image: url('{{ url_for('static', filename='assets/img/home.jpg') }}')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7 text-center">
+                    <div class="site-heading">
+                        <h1>{{ params['head_uri'] }}</h1>
+                        <span class="subheading">A Blog That Tells the Story of Warriors</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                {% for post in posts %}
+                    <div class="post-preview">
+                        <a href="/post/{{ post.slug }}" class="post-link">
+                            <h2 class="post-title">{{ post.title }}</h2>
+                            <h3 class="post-subtitle">{{ post.tagline }}</h3>
+                            <p class="post-content">{{ post.content[:100]|safe }}...</p>
+                        </a>
+                        <p class="post-meta">
+                            Posted by <strong>Admin</strong> on {{ post.date }}
+                        </p>
+                    </div>
+                    <hr class="my-4">
+                {% endfor %}
+
+                <!-- Pager -->
+                <div class="d-flex justify-content-between mb-4">
+                    {% if prev %}
+                        <a class="btn btn-primary text-uppercase" href="{{ prev }}">← Newer Posts</a>
+                    {% endif %}
+                    {% if next %}
+                        <a class="btn btn-primary text-uppercase" href="{{ next }}">Older Posts →</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Make whole post preview clickable
+        document.querySelectorAll(".post-link").forEach(item => {
+            item.addEventListener("click", (event) => {
+                event.preventDefault();
+                window.location.href = item.getAttribute("href");
+            });
+        });
+    </script>
+{% endblock %}

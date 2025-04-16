@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% block body %}
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('{% if sno=='0' %}{{ url_for('static', filename='assets/img/new-bg.jpg') }}{% else %}{{ url_for('static', filename='assets/img/edit-bg.jpg') }}{% endif %}')">
+        <div class="container position-relative px-4 px-lg-5 text-center">
+            <div class="page-heading">
+                <h3>{% if sno=='0' %}Add a New Post{% else %}Edit a Post{% endif %}</h3>
+                <span class="subheading">{% if sno=='0' %}Add a New Post For Your Viewers{% else %}Edit an Existing Post{% endif %}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="mb-4">
+        <div class="container px-4 px-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="my-5">
+                        <form id="postForm" action="/edit/{{sno}}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                            <h3 class="text-primary">{% if sno=='0' %}Add a new post{% else %}Edit an existing post{% endif %}</h3>
+
+                            {% if message %}
+                                <h3 class="text-danger">{{message}}</h3>
+                            {% endif %}
+                            <hr>
+
+                            <div class="form-floating mb-3">
+                                <input class="form-control" value="{{post.title}}" id="title" name="title" type="text" placeholder="Enter your title..." required />
+                                <label for="title">Title</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="slug" value="{{post.slug}}" name="slug" type="text" placeholder="Enter a slug..." required />
+                                <label for="slug">Slug</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="tagline" value="{{post.tagline}}" name="tagline" type="text" placeholder="Enter your tagline here..." required />
+                                <label for="tagline">Tagline</label>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="imgUpload" class="form-label">Upload Image</label>
+                                <input type="file" class="form-control" id="imgUpload" name="img" accept="image/*">
+                                <input type="hidden" id="imgName" name="imgName" value="{{post.img}}">
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="content" name="content" placeholder="Enter your content here..." rows="6" required>{{post.content}}</textarea>
+                                <label for="content">Content</label>
+                            </div>
+
+                            <button class="btn btn-primary w-100 text-uppercase" id="submitButton" type="submit">
+                                {% if sno=='0' %}Add{% else %}Edit{% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById('imgUpload').addEventListener('change', function(event) {
+            let file = event.target.files[0];
+            if (file) {
+                document.getElementById('imgName').value = file.name;
+            }
+        });
+
+        function validateForm() {
+            let title = document.getElementById('title').value.trim();
+            let slug = document.getElementById('slug').value.trim();
+            let tagline = document.getElementById('tagline').value.trim();
+            let content = document.getElementById('content').value.trim();
+
+            if (!title || !slug || !tagline || !content) {
+                alert('All fields are required!');
+                return false;
+            }
+            return true;
+        }
+    </script>
+{% endblock %}
