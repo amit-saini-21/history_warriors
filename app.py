@@ -11,9 +11,7 @@ with open('config.json','r') as c:
     params=json.load(c)["params"]
 
 app=Flask(__name__)
-local_server =  "mysql+pymysql://sql12773133:BjMryrT5TW@sql12.freesqldatabase.com:3306/sql12773133"
-secret_key = "abc-jkl-xyz-123"
-app.config['SECRET_KEY']=secret_key
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "fallback-secret-key")
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'assets', 'img') 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "gif"}
@@ -23,7 +21,7 @@ app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "gif"}
 
 #app.config['SQLALCHEMY_DATABASE_URI']=local_server
 
-app.config['SQLALCHEMY_DATABASE_URI']=local_server
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI")
 db=SQLAlchemy(app)
 
 #class  for databse contact
