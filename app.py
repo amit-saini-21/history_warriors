@@ -39,7 +39,6 @@ class Posts(db.Model):
     slug=db.Column(db.String(20),nullable=False)
     title=db.Column(db.String(200),nullable=False)
     tagline=db.Column(db.String(200),nullable=False)
-    date=db.Column(db.String(10),nullable=False)
     content=db.Column(db.String(5000),nullable=False)
     img=db.Column(db.String(40),nullable=False)
 #class for about database
