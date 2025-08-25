@@ -27,7 +27,7 @@ db=SQLAlchemy(app)
 #class  for databse contact
 class Contact(db.Model):
     sno=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String(30),nullable=False)
+    name=db.Column(db.String(50),nullable=False)
     phone_num=db.Column(db.String(15),nullable=True)
     date=db.Column(db.String(10),nullable=False)
     message=db.Column(db.String(300),nullable=False)
@@ -36,13 +36,13 @@ class Contact(db.Model):
 #class for database posts
 class Posts(db.Model):
     sno=db.Column(db.Integer,primary_key=True)
-    slug=db.Column(db.String(20),nullable=False)
+    slug=db.Column(db.String(100),nullable=False)
     title=db.Column(db.String(200),nullable=False)
     tagline=db.Column(db.String(200),nullable=False)
     date=db.Column(db.String(10),nullable=False)
-    content=db.Column(db.String(5000),nullable=False)
+    content=db.Column(db.String(10000),nullable=False)
     
-    img=db.Column(db.String(40),nullable=False)
+    img=db.Column(db.String(80),nullable=False)
 #class for about database
 class About(db.Model):
     para_no=db.Column(db.Integer,primary_key=True)
