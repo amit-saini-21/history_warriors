@@ -99,20 +99,22 @@ def edit_about():
     return render_template('about.html',params=params)
 
 #end point for contact page
-@app.route('/contact',methods=["GET","POST"])
+@app.route('/contact', methods=["GET", "POST"])
 def contact():
-    if request.method=="POST":
-        name=request.form.get('name')
-        phone_num=request.form.get('phone_num')
-        email=request.form.get('email')
-        message=request.form.get('message')
-        date=datetime.now()
-        entry=Contact(name=name,phone_num=phone_num,email=email,message=message,date=date)
+    if request.method == "POST":
+        name = request.form.get('name')
+        phone_num = request.form.get('phone_num')
+        email = request.form.get('email')
+        message = request.form.get('message')
+        date = datetime.now().strftime("%Y-%m-%d")   # 👈 Fix
+
+        entry = Contact(name=name, phone_num=phone_num, email=email, message=message, date=date)
         db.session.add(entry)
         db.session.commit()
-        return  redirect('/contact')
-   
-    return render_template('contact.html',params=params)
+        return redirect('/contact')
+
+    return render_template('contact.html', params=params)
+
 #end point for login page
 @app.route('/login',methods=["GET","POST"])
 def login():
