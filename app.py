@@ -51,6 +51,7 @@ class Admin(db.Model):
     admin_username=db.Column(db.String(100),primary_key=True)
     admin_password=db.Column(db.String(100),nullable=False)
 # end point for home page
+db.create_all()
 @app.route('/')
 def home():
     posts = Posts.query.all()  # Fetch all posts
