@@ -39,7 +39,9 @@ class Posts(db.Model):
     slug=db.Column(db.String(20),nullable=False)
     title=db.Column(db.String(200),nullable=False)
     tagline=db.Column(db.String(200),nullable=False)
+    date=db.Column(db.String(10),nullable=False)
     content=db.Column(db.String(5000),nullable=False)
+    
     img=db.Column(db.String(40),nullable=False)
 #class for about database
 class About(db.Model):
@@ -213,7 +215,7 @@ def edit(sno):
                 return render_template('edit.html', params=params, sno=sno, post=post, message="Please fill all details")
 
             if sno == '0':  # New post
-                entry = Posts(title=edit_title, slug=edit_slug, content=edit_content, tagline=edit_tagline, img=edit_img, date=datetime.now())
+                entry = Posts(title=edit_title, slug=edit_slug, content=edit_content, tagline=edit_tagline, img=edit_img, date=datetime.now().strftime("%Y-%m-%d"))
                 db.session.add(entry)
             else:  # Edit existing post
                 post.title = edit_title
