@@ -180,50 +180,55 @@ def allowed_file(filename):
 def edit(sno):
     admin=Admin.query.filter_by().first()
     if 'user' in session and session['user'] == admin.admin_username:
-        if request.method == "POST":
-            edit_title = request.form.get('title')
-            edit_slug = request.form.get('slug') + str(random.randint(1000, 9999))
-            edit_content = request.form.get('content')
-            edit_tagline = request.form.get('tagline')
-
+       if request.method == "POST":
+            edit_title = request.form.get('title') or ""
+            edit_slug = (request.form.get('slug') or "").strip() + str(random.randint(1000, 9999))
+            edit_content = request.form.get('content') or ""
+            edit_tagline = request.form.get('tagline') or ""
+        
             post = Posts.query.filter_by(sno=sno).first() if sno != '0' else None
-            old_image = post.img if post else None  # Store old image name
-
+            old_image = post.img if post else None  
+        
             # Handle file upload
             if 'img' in request.files and request.files['img'].filename != "":
                 file = request.files['img']
                 if file and allowed_file(file.filename):
-                    # Generate unique filename
                     filename = str(random.randint(1000, 9999)) + "_" + secure_filename(file.filename)
                     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    file.save(file_path)  # Save new image
-
-                    # Delete old image if it exists
+                    file.save(file_path)
+        
                     if old_image:
                         old_image_path = os.path.join(app.config['UPLOAD_FOLDER'], old_image)
                         if os.path.exists(old_image_path):
                             os.remove(old_image_path)
-
-                    edit_img = filename  # Update image name for database
+        
+                    edit_img = filename
                 else:
                     return render_template('edit.html', params=params, sno=sno, post=post, message="Invalid image format!")
             else:
-                edit_img = request.form.get('imgName')  # Keep old image if no new one uploaded
-
+                edit_img = request.form.get('imgName') or old_image or "default.jpg"
+        
             # Validate required fields
-            if edit_title == "" or edit_content == "" or edit_slug == "":
+            if not edit_title or not edit_content or not edit_slug:
                 return render_template('edit.html', params=params, sno=sno, post=post, message="Please fill all details")
-
+        
             if sno == '0':  # New post
-                entry = Posts(title=edit_title, slug=edit_slug, content=edit_content, tagline=edit_tagline, img=edit_img, date=datetime.now().strftime("%Y-%m-%d"))
+                entry = Posts(
+                    title=edit_title,
+                    slug=edit_slug,
+                    content=edit_content,
+                    tagline=edit_tagline,
+                    img=edit_img,
+                    date=datetime.now().strftime("%Y-%m-%d")
+                )
                 db.session.add(entry)
             else:  # Edit existing post
                 post.title = edit_title
                 post.slug = edit_slug
                 post.content = edit_content
                 post.tagline = edit_tagline
-                post.img = edit_img  # Update image
-
+                post.img = edit_img  
+        
             db.session.commit()
             return redirect('/dashboard')
 
